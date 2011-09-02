@@ -31,7 +31,7 @@ module Termtter
       Client.get_hooks('prepare_command').each {|hook|
         command_text = hook.call(command_text)
       }
-      Client.execute(command_text)
+      Client.internal_execute(command_text)
     rescue CommandNotFound => e
       hooks = Client.get_hooks('command_not_found')
       raise e if hooks.empty?

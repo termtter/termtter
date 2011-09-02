@@ -153,6 +153,11 @@ module Termtter
 
       def execute(text)
         text = text.strip
+        internal_execute("/" + text)
+      end
+
+      def internal_execute(text)
+        text = text.strip
 
         @task_manager.invoke_and_wait do
           # FIXME: This block can become Maybe Monad
@@ -162,25 +167,26 @@ module Termtter
           }
           return if text.empty?
 
-          command = find_command(text)
+          co = Termtter::CommandOption.new(text)
+          command = find_command(co.options[:command])
           raise CommandNotFound, text unless command
 
-          command_str, modified_arg = command.split_command_line(text)
-          command_str.strip!
-          modified_arg ||= ''
+          #command_str, modified_arg = command.split_command_line(text)
+          #command_str.strip!
+          #modified_arg ||= ''
 
           # FIXME: This block can become Maybe Monad
           get_hooks("modify_arg_for_#{command.name.to_s}").each {|hook|
-            break if modified_arg == false # interrupt if hook return false
-            modified_arg.strip!
-            modified_arg = hook.call(command_str, modified_arg) || ''
+            break if co.options[:args] == false # interrupt if hook return false
+            co.options[:args].strip!
+            co.options[:args] = hook.call(co.options[:command], co.options[:args]) || ''
           }
-          modified_arg.strip!
+          co.options[:args].strip!
 
           begin
-            call_hooks("pre_exec_#{command.name.to_s}", command, modified_arg)
-            result = command.call(command_str, modified_arg, text) # exec command
-            call_hooks("post_exec_#{command.name.to_s}", command_str, modified_arg, result)
+            call_hooks("pre_exec_#{command.name.to_s}", command, co.options[:args])
+            result = command.call(co.options[:command], co.options[:args], text) # exec command
+            call_hooks("post_exec_#{command.name.to_s}", co.options[:command], co.options[:args], result)
             call_hooks("post_command", text)
           rescue CommandCanceled
             return false

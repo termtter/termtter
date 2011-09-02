@@ -4,18 +4,17 @@ require "strscan"
 
 module Termtter
   class CommandOption
-    attr_reader :tokens
+    attr_reader :options
 
     def initialize(input)
       @command_line = input
-      @tokens = parse
+      @options = parse
     end
 
     def parse
       r = {}
       case @command_line[0]
       when '/'
-        p "coomandn"
         r = parse_command
       when '$'
         p "repluy"
@@ -32,7 +31,7 @@ module Termtter
     def parse_command
       r = {}
       s = StringScanner.new(@command_line)
-      s.scan(/\/(\w+)(\s+)/)
+      s.scan(/\/(\w+)(\s*)/)
       r[:command] = s[1]
       r[:args] = s.post_match
       r
