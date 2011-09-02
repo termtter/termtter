@@ -28,6 +28,7 @@ module Termtter
   require 'termtter/default_config'
   require 'termtter/optparse'
   require 'termtter/command'
+  require 'termtter/command_option'
   require 'termtter/hook'
   require 'termtter/task'
   require 'termtter/task_manager'
