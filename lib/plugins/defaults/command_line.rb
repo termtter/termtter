@@ -71,17 +71,28 @@ module Termtter
 
     def do_completion(input)
       input = input.sub(/^\s*/, '')
-
       words = []
 
-      words = Client.commands.values.
+      if input[0] == '/' # command completion
+        input = input[1, input.size]
+
+        words = Client.commands.values.
                 inject([]) {|array, command| array + [command.name] + command.aliases}.
                 map(&:to_s).
                 grep(/^\s*#{Regexp.quote(input)}/)
 
-      if words.empty?
-        command = Client.find_command(input)
-        words = command ? command.complement(input) : []
+        if words.empty?
+          command = Client.find_command(input)
+          words = command ? command.complement(input) : []
+        end
+      
+        unless words.empty?
+          words.flatten!
+          words.compact!
+          words.map! do |n|
+            "/" + n
+          end
+        end
       end
 
       if words.empty?
