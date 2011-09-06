@@ -13,11 +13,12 @@ module Termtter
 
     def parse
       r = {}
-      case @command_line[0]
-      when '/'
+      case
+      when @command_line.start_with?('/')
+        p "command"
         r = parse_command
-      when '$'
-        p "repluy"
+      when @command_line.start_with?('$')
+        p "reply"
         r = parse_reply
       else
         p "update"
@@ -27,7 +28,7 @@ module Termtter
       p r
       r
     end
-    
+
     def parse_command
       r = {}
       s = StringScanner.new(@command_line)
@@ -36,7 +37,7 @@ module Termtter
       r[:args] = s.post_match
       r
     end
-    
+
     def parse_reply
       r = {}
       r[:command] = "reply"

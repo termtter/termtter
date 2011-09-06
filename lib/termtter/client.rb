@@ -181,7 +181,8 @@ module Termtter
 
           begin
             call_hooks("pre_exec_#{command.name.to_s}", command, co.options[:args])
-            result = command.call(co.options[:command], co.options[:args], text) # exec command
+            #result = command.call(co.options[:command], co.options[:args], text) # exec command
+            result = true
             call_hooks("post_exec_#{command.name.to_s}", co.options[:command], co.options[:args], result)
             call_hooks("post_command", text)
           rescue CommandCanceled
