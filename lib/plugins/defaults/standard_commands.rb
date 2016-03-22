@@ -332,8 +332,6 @@ module Termtter::Client
       args.split(' ').each do |arg|
         id =
           case arg
-          when /^https?:/
-            arg.split(%{/}).last.to_i
           when /^\d+/
             arg.to_i
           when /^@([A-Za-z0-9_]+)/
@@ -342,12 +340,9 @@ module Termtter::Client
             return if statuses.empty?
             statuses[0].id
           when %r{twitter.com/(?:\#!/)[A-Za-z0-9_]+/status(?:es)?/\d+}
-            status_id = URI.parse(arg).path.split(%{/}).last
+            URI.parse(arg).path.split(%{/}).last.to_i
           when %r{twitter.com/[A-Za-z0-9_]+}
-            user_name = normalize_as_user_name(URI.parse(arg).path.split(%{/}).last)
-            statuses = Termtter::API.twitter.user_timeline(:screen_name => user_name)
-            return if statuses.empty?
-            statuses[0].id
+            URI.parse(arg).path.split(%{/}).last.to_i
           when /^\/(.*)$/
             word = $1
             raise "Not implemented yet."
