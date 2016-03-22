@@ -332,6 +332,8 @@ module Termtter::Client
       args.split(' ').each do |arg|
         id =
           case arg
+          when /^https?:/
+            arg.split(%{/}).last.to_i
           when /^\d+/
             arg.to_i
           when /^@([A-Za-z0-9_]+)/
