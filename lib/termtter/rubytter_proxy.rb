@@ -1,5 +1,6 @@
 begin
   require 'nokogiri'
+  require 'timeout'
 rescue LoadError
 end
 
@@ -127,7 +128,7 @@ module Termtter
       raise FrequentAccessError if @safe_mode && !self.current_limit.safe?
       config.retry.times do |now|
         begin
-          timeout(config.timeout) do
+          Timeout.timeout(config.timeout) do
             return @rubytter.__send__(method, *args, &block)
           end
         rescue Rubytter::APIError => e
