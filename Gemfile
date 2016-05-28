@@ -9,7 +9,7 @@ gem 'rubytter', '~> 1.5.1'
 gem 'notify', '~> 0.5.1'
 gem 'activerecord', '~> 4.2.0'
 gem 'builder', '~> 3.1.4'
-gem 'fluent-logger', '~> 0.4.6'
+gem 'fluent-logger', '~> 0.5.1'
 
 group :test do
   gem 'rake'
