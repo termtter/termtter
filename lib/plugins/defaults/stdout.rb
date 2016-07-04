@@ -149,7 +149,7 @@ module Termtter
           nil
         end
 
-      time = "(#{Time.parse(s.created_at).strftime(time_format)})"
+      time = "(#{Time.parse(s.created_at).localtime.strftime(time_format)})"
       source =
         case s.source
         when />(.*?)</ then $1
