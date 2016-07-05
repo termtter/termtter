@@ -50,10 +50,10 @@ module Termtter
       @twitter.update('test')
     end
 
-    it 'should retry when raise TimeoutError' do
+    it 'should retry when raise Timeout::Error' do
       pending("Not yet implemented")
       config.retry = 3
-      @rubytter_mock.stub!(:update).exactly(config.retry).times.and_raise(TimeoutError)
+      @rubytter_mock.stub!(:update).exactly(config.retry).times.and_raise(Timeout::Error)
       @twitter.update('test')
     end
 

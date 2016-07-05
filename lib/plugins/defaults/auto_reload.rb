@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+
+require 'timeout'
+
 auto_reload_proc = lambda do
   begin
     Termtter::Client.execute('reload -r')
-  rescue TimeoutError
+  rescue Timeout::Error
     # do nothing
   rescue
   rescue Exception => e

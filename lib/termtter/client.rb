@@ -2,6 +2,7 @@
 require 'fileutils'
 require 'logger'
 require 'termcolor'
+require 'timeout'
 
 module Termtter
   class CommandNotFound < StandardError; end
@@ -187,7 +188,7 @@ module Termtter
           end
           return true
         end
-      rescue TimeoutError
+      rescue Timeout::Error
         call_hooks("timeout", text)
         raise
       end
