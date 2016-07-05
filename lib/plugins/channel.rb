@@ -1,3 +1,5 @@
+require 'timeout'
+
 config.plugins.channel.set_default(:auto_reload_channels,  {})
 config.plugins.channel.set_default(:short_names,           {})
 config.plugins.channel.set_default(:colorize,              true)
@@ -139,7 +141,7 @@ config.plugins.channel.auto_reload_channels.each do |c, i|
           Readline.refresh_line
         end
       end
-    rescue TimeoutError
+    rescue Timeout::Error
       # do nothing
     rescue Exception => e
       Termtter::Client.handle_error(e)

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 require 'singleton'
+require 'timeout'
 
 module Termtter
   class CommandLine
@@ -38,7 +39,7 @@ module Termtter
       hooks.each {|hook|
         hook.call(command_text)
       }
-    rescue TimeoutError
+    rescue Timeout::Error
       puts TermColor.parse("<red>Time out :(</red>")
     end
 

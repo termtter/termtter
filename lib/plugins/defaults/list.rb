@@ -1,3 +1,5 @@
+require 'timeout'
+
 module Termtter::Client
   public_storage[:lists] = []
 
@@ -5,7 +7,7 @@ module Termtter::Client
     begin
       public_storage[:lists] +=
         Termtter::API.twitter.lists(:screen_name => config.user_name).map(&:full_name)
-    rescue TimeoutError
+    rescue Timeout::Error
       # do nothing
     rescue Exception => e
       Termtter::Client.handle_error(e)
