@@ -31,7 +31,7 @@ module Termtter::Client
   )
 
   register_command(
-    :name => :update, :alias => :u,
+    :name => :update, :aliases => [:u, :a],
     :exec => lambda {|arg|
       return if arg.empty?
       params =
@@ -71,7 +71,7 @@ module Termtter::Client
   )
 
   register_command(
-    :name => :delete, :aliases =>[:del],
+    :name => :delete, :aliases =>[:del, :rm],
     :exec_proc => lambda {|arg|
       id =
         case arg
@@ -327,7 +327,7 @@ module Termtter::Client
   end
 
   register_command(
-    :name => :favorite, :aliases => [:fav],
+    :name => :favorite, :aliases => [:fav, :f],
     :exec_proc => lambda {|args|
       args.split(' ').each do |arg|
         id =
@@ -336,6 +336,11 @@ module Termtter::Client
             arg.to_i
           when /^@([A-Za-z0-9_]+)/
             user_name = normalize_as_user_name($1)
+            statuses = Termtter::API.twitter.user_timeline(:screen_name => user_name)
+            return if statuses.empty?
+            statuses[0].id
+          when /^([A-Za-z_]+)/
+            user_name = $1
             statuses = Termtter::API.twitter.user_timeline(:screen_name => user_name)
             return if statuses.empty?
             statuses[0].id
