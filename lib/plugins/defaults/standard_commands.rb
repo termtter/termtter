@@ -334,18 +334,24 @@ module Termtter::Client
           case arg
           when /^\d+/
             arg.to_i
+          when %r{twitter.com/(?:\#!/)[A-Za-z0-9_]+/status(?:es)?/\d+},
+            %r{twitter.com/[A-Za-z0-9_]+}
+            URI.parse(arg).path.split(%{/}).last.to_i
           when /^@([A-Za-z0-9_]+)/
             user_name = normalize_as_user_name($1)
             statuses = Termtter::API.twitter.user_timeline(:screen_name => user_name)
             return if statuses.empty?
+            return if statuses[0].text.include?("@")
+            return if statuses[0].text.include?("RT")
+            return if statuses[0].text.include?("QT")
             statuses[0].id
-          when %r{twitter.com/(?:\#!/)[A-Za-z0-9_]+/status(?:es)?/\d+},
-            %r{twitter.com/[A-Za-z0-9_]+}
-            URI.parse(arg).path.split(%{/}).last.to_i
           when /^([A-Za-z0-9_]+)/
-            user_name = $1
+            user_name = normalize_as_user_name($1)
             statuses = Termtter::API.twitter.user_timeline(:screen_name => user_name)
             return if statuses.empty?
+            return if statuses[0].text.include?("@")
+            return if statuses[0].text.include?("RT")
+            return if statuses[0].text.include?("QT")
             statuses[0].id
           when /^\/(.*)$/
             word = $1
